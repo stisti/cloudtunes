@@ -1,0 +1,21 @@
+{
+  "name": "cloudtunes",
+  "version": "0.0.0",
+  "description": "iTunes-in-the-cloud",
+  "main": "uploader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "music",
+    "itunes",
+    "fsio"
+  ],
+  "author": "Sami Tikka",
+  "license": "BSD",
+  "dependencies": {
+    "carrier": "~0.1.7",
+    "async": "~0.1.22"
+  }
+}
