@@ -16,6 +16,7 @@
   "license": "BSD",
   "dependencies": {
     "carrier": "~0.1.7",
-    "async": "~0.1.22"
+    "async": "~0.1.22",
+    "request": "~2.12.0"
   }
 }
