@@ -11,8 +11,8 @@ FSIO.prototype.ticket = function (cb) {
     request.post({
         url: this._config.apiEndPoint + "/ticket/1_0_0/",
         json: {
-            authenticationToken: this._config.authenticationToken,
-            authorizationTicket: this._config.authorizationTicket
+            AuthenticationToken: this._config.authenticationToken,
+            AuthorizationTicket: this._config.authorizationTicket
         }
     }, function (err, resp, body) {
         if (resp.statusCode == 200) {
