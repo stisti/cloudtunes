@@ -6,8 +6,6 @@ function FSIO (config) {
 }
 
 FSIO.prototype.ticket = function (cb) {
-    console.log(this._config.authenticationToken);
-    console.log(this._config.authorizationTicket);
     request.post({
         url: this._config.apiEndPoint + "/ticket/1_0_0/",
         json: {
