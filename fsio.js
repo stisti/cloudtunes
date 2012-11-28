@@ -1,20 +1,22 @@
 var request = require("request");
 
 function FSIO (config) {
-    this.config = config;
-    this.ticket = null;
+    this._config = config;
+    this._ticket = null;
 }
 
 FSIO.prototype.ticket = function (cb) {
+    console.log(this._config.authenticationToken);
+    console.log(this._config.authorizationTicket);
     request.post({
-        url: config.apiEndPoint + "/ticket/1_0_0/",
+        url: this._config.apiEndPoint + "/ticket/1_0_0/",
         json: {
-            authenticationToken: config.authenticationToken,
-            authorizationTicket: config.authorizationTicket
+            authenticationToken: this._config.authenticationToken,
+            authorizationTicket: this._config.authorizationTicket
         }
     }, function (err, resp, body) {
         if (resp.statusCode == 200) {
-            this.ticket = body;
+            this._ticket = body;
             if (cb) {
                 cb(null, body.Ticket);
             }

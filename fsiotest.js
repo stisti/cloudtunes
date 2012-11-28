@@ -1,7 +1,7 @@
 var config = require(process.env.HOME + "/.fipconfig.js");
 var fsio = require("./fsio");
 
-var client = new fsio(config);
+var client = fsio(config);
 
 client.ticket(function (err, ticket) {
     if (err) {
