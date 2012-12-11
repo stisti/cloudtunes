@@ -17,6 +17,7 @@
   "dependencies": {
     "carrier": "~0.1.7",
     "async": "~0.1.22",
-    "request": "~2.12.0"
+    "request": "~2.12.0",
+    "node-static": "~0.6.5"
   }
 }
