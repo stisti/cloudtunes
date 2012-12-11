@@ -1,0 +1,118 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="NAME">define</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="STRN">"FsioBase"</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">FsioBase</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>  4</span>      * @fileOverview
+<span class='line'>  5</span>      *
+<span class='line'>  6</span>      * FSIO Notification API.
+<span class='line'>  7</span>      */</span><span class="WHIT">
+<span class='line'>  8</span> 
+<span class='line'>  9</span> </span><span class="WHIT">    </span><span class="NAME">FsioUeb.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">FsioBase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// inherit</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">FsioUeb.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FsioUeb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 13</span>      * @class
+<span class='line'> 14</span>      * @name FsioUeb
+<span class='line'> 15</span>      * @augments FsioBase
+<span class='line'> 16</span>      * @see Fsio#ueb
+<span class='line'> 17</span>      */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">    </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">FsioUeb</span><span class="PUNC">(</span><span class="NAME">host</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">version</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">uid</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">        </span><span class="NAME">this.init</span><span class="PUNC">(</span><span class="NAME">host</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"notification"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">version</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">        </span><span class="NAME">this.uid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">uid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 22</span> 
+<span class='line'> 23</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 24</span>      * Create notification context to be used with
+<span class='line'> 25</span>      * {@link #waitForNotifications}.
+<span class='line'> 26</span>      *
+<span class='line'> 27</span>      * @param {string} device_id
+<span class='line'> 28</span>      * Identifier of the device making the request.
+<span class='line'> 29</span>      * @param {string} auth_token
+<span class='line'> 30</span>      * Ticket must be provided only if the deployment in question has been
+<span class='line'> 31</span>      * configured to require authenticating notification requests.
+<span class='line'> 32</span>      * @param {integer} keep_alive_threshold
+<span class='line'> 33</span>      * Time (seconds) after which the server must respond.
+<span class='line'> 34</span>      * Constraints: 30..3600.
+<span class='line'> 35</span>      * @param {string[]} include_content_types
+<span class='line'> 36</span>      * Array of content types client wants to get notified of.
+<span class='line'> 37</span>      * E.g. ["fsio:file","fsio:metadata"].
+<span class='line'> 38</span>      * @param {integer} [default_throttling_threshold]
+<span class='line'> 39</span>      * Default throttling threshold (seconds). Has no effect for the first
+<span class='line'> 40</span>      * request made but for subsequent requests a response to the client is not
+<span class='line'> 41</span>      * sent until the throttling threshold number of seconds have elapsed since
+<span class='line'> 42</span>      * the last response was sent.
+<span class='line'> 43</span>      * @param {object[]} [content_specific_thresholds]
+<span class='line'> 44</span>      * Content specific throttling thresholds.
+<span class='line'> 45</span>      * Array of objects with ContentType and Threshold property.
+<span class='line'> 46</span>      * E.g. [{ContentType: "fsio:file",
+<span class='line'> 47</span>      *        Threshold: 60},
+<span class='line'> 48</span>      *       {ContentType: "fsio:metadata",
+<span class='line'> 49</span>      *        Threshold: 30}].
+<span class='line'> 50</span>      */</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">    </span><span class="NAME">FsioUeb.prototype.createNotificationContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">        </span><span class="NAME">device_id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">auth_token</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keep_alive_threshold</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">include_content_types</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">        </span><span class="NAME">default_throttling_threshold</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">        </span><span class="NAME">content_specific_thresholds</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="COMM">/** object */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">                </span><span class="NAME">json</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">                    </span><span class="NAME">UserId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.uid</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">                    </span><span class="NAME">DeviceId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">device_id</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">                    </span><span class="NAME">KeepAliveThreshold</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">keep_alive_threshold</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">                    </span><span class="NAME">IncludeContentTypes</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">include_content_types</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">                    </span><span class="NAME">DefaultThrottlingThreshold</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">default_throttling_threshold</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">                    </span><span class="NAME">ContentSpecificThresholds</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">content_specific_thresholds</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">                </span><span class="NAME">auth_token</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">auth_token</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> 
+<span class='line'> 68</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 69</span>      * Retrieve notifications. If there are no notifications currently
+<span class='line'> 70</span>      * available, complete callback is called when one or more notifications are
+<span class='line'> 71</span>      * available or keep alive threshold expires.
+<span class='line'> 72</span>      *
+<span class='line'> 73</span>      * @param {object} ctx
+<span class='line'> 74</span>      * Notification context created in {@link #createNotificationContext}.
+<span class='line'> 75</span>      * @param {object[]} last_seen_notifications
+<span class='line'> 76</span>      * Client's last seen notifications.
+<span class='line'> 77</span>      * Array of objects with ContentType and StateId property.
+<span class='line'> 78</span>      * E.g. [{ContentType: "fsio:file",
+<span class='line'> 79</span>      *        StateId: "344"},
+<span class='line'> 80</span>      *       {ContentType: "fsio:metadata",
+<span class='line'> 81</span>      *        StateId: "2012-05-02 10:36:11.618237"}].
+<span class='line'> 82</span>      * Initial call has empty 'StateId'.
+<span class='line'> 83</span>      * @param {function(jqXHR,textStatus)} complete
+<span class='line'> 84</span>      * Complete callback.
+<span class='line'> 85</span>      * @param {object} [params]    Query parameters.
+<span class='line'> 86</span>      * @param {object} [headers]   Extra headers.
+<span class='line'> 87</span>      */</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">    </span><span class="NAME">FsioUeb.prototype.waitForNotifications</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">        </span><span class="NAME">ctx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">last_seen_notifications</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">complete</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">        </span><span class="COMM">// create json body for request</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ctx.json</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">        </span><span class="NAME">json.LastSeenNotifications</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">last_seen_notifications</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.stringify</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"notifications"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">        </span><span class="NAME">headers</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">        </span><span class="NAME">headers</span><span class="PUNC">[</span><span class="STRN">"content-type"</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"application/json; charset=UTF-8"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">            </span><span class="COMM">// query params for POST</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">            </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"?"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">$.param</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">ctx.auth_token</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">            </span><span class="NAME">this.requestWithTicket</span><span class="PUNC">(</span><span class="NAME">ctx.auth_token</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"POST"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">complete</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">                                   </span><span class="NAME">headers</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">            </span><span class="NAME">this.request</span><span class="PUNC">(</span><span class="STRN">"POST"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">complete</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> 
+<span class='line'>109</span> </span><span class="WHIT">    </span><span class="COMM">// Return the constructor function</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">FsioUeb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

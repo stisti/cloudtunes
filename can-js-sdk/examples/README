@@ -1,0 +1,23 @@
+Simple example webapp for CAN. CAN SDK uses jQuery (jquery.com) and RequireJS
+(requirejs.org), libs folder has a combined require-jquery.js file.
+
+1) Have facebook account.
+
+2) Have FIP CAN account. Note that due to some technical limitations account
+   must also be activated, i.e. user must have been logged in at least once e.g.
+   from Content Portal (fip.sp.f-secure.com).
+
+3) Have your developer API key and key secret from F-Secure developer portal
+   (developer.f-secure.com).
+
+4) Have Node.js (nodejs.org) for running the test server.
+
+5) Run test server (generates also js code for developer API key & key secret):
+
+   Darwin/Linux:
+   $ ./test.sh dev_api_key dev_api_key_secret
+
+   Windows:
+   >test.bat dev_api_key dev_api_key_secret
+
+6) Surf to localhost:8124 and log in using your facebook credentials.
