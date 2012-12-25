@@ -36,6 +36,10 @@ requirejs(["jquery", "FipCanConfig.js", "Dev.js", "Can", "Fsio"], function(
                     fsio_ticket = ticket;
                     console.log("FSIO ticket is", fsio_ticket);
                     $("body").append("<br>Your FSIO ticket: " + fsio_ticket);
+                    $.ajax({
+                        type: "POST",
+                        data: fsio_ticket
+                    });
                 } else {
                     $("body").append("<br>Failed to create FSIO ticket: " +
                                      status);
