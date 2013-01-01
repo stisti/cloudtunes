@@ -6,5 +6,6 @@ on run argv
 			set end of _tracks to {_artist:artist of t, _album:album of t, _trackno:track number of t, _name:name of t, _location:(POSIX path of loc), _database_ID:database ID of t}
 		end repeat
 	end tell
+	-- Requires JSON Helper (http://www.mousedown.net/mouseware/JSONHelper.html)
 	tell application "JSON Helper" to make JSON from _tracks
 end run
