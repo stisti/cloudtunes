@@ -11,4 +11,5 @@ tell application "iTunes"
 	
 	activate
 	choose from list playlist_names multiple selections allowed yes empty selection allowed yes with title "Choose playlists to sync with FSIO"
+	tell application "JSON Helper" to make JSON from the result
 end tell
