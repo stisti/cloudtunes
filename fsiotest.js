@@ -3,10 +3,10 @@ var fsio = require("./fsio");
 
 var client = fsio(config);
 
-client.ticket(function (err, ticket) {
+client.ticket(8124, function (err, ticket) {
     if (err) {
-        console.error(JSON.stringify(err));
+        console.error(err);
     } else {
-        console.log(JSON.stringify(ticket));
+        console.log(ticket);
     }
 })
